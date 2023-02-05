@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/output.css" rel="stylesheet">
+  <title>BRUH MINECRAFT SERVER</title> <!--WEBSITE TITLE CHANGE ANYTHING-->
+</head>
+<body class="main">
+    <div class="center-container">
+        <img src="/img/block.png" class="h-36 w-36" id="server-icon"/>
+        <div class="flex flex-col ">
+            <h1 class="text-7xl font-medium text-white-800 mb-5 colorgold"> BRUH Minecraft </h1> <!--Server NAME CHANGE ANYTHING-->
+            <div class="colororange"><span class="text-gold-300 text-lg mb-3" id="server-ip"></span> Paper 1.19.3</div> <!--SERVER Version CHANGE ANYTHING-->
+            <div class=" text-3xl"><span class="font-semibold server-status" id="server-version"></span></div>
+            <div class=" text-3xl"><span class="font-semibold server-status colorgreen" id="player-count">00</span> Players</div>
+			<div class=" text-3xl"><span class="font-semibold server-status" id="player-name"></span> </div> <!--PLAYERS NAME-->
+        </div>
+    </div>
+<script>
+function initServerData(serverIp,serverPort){
+    const serverIpElement = document.getElementById('server-ip');
+    serverIpElement.innerHTML = serverIp;
+
+    console.log('https://mcapi.us/server/status?ip='+serverIp+'&port='+serverPort);
+    fetch('https://mcapi.us/server/status?ip='+serverIp+'&port='+serverPort)
+    .then(response => response.json())
+    .then(data => handleServerStatus(data));
+
+    function handleServerStatus(data){
+        if(data.status=='error'){
+            console.log(data.error);
+            return false;
+        }
+
+        const playerCounter = document.getElementById("player-count");  //PLAYER COUNT
+        playerCounter.innerHTML = data.players.now;
+
+        const logo = document.getElementById("server-icon"); //SERVER ICON
+        logo.src = data.favicon;
+		
+        const playerNames = document.getElementById("player-name"); //PLAYERS NAME
+        for (var i = 0; i < data.players.sample.length; i++) {
+            playerNames.innerHTML += data.players.sample[i].name + ", ";
+        }
+    } 
+
+}
+initServerData("bruhminecraft.com","25565"); //SERVER IP ADD YOUR SERVER IP HERE
+</script>
+</body>
+</html>
